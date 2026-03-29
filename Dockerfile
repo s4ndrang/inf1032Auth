@@ -11,8 +11,7 @@ FROM eclipse-temurin:21-jdk-jammy
 WORKDIR /app
 
 # Copy the project files into the container
-#COPY . .
-COPY target/*.jar app.jar
+COPY . .
 
 # Make the mvnw file executable
 RUN chmod +x ./mvnw
