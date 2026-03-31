@@ -66,7 +66,7 @@ public class AuthController {
                         loginDTO.getPassword().trim()));
     }
 
-    @GetMapping("/health")
+    @GetMapping("health")
     public String health() {
         return "OK";
     }
