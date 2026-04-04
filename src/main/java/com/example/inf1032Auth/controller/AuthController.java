@@ -59,11 +59,31 @@ public class AuthController {
                     .body("Error");
     }
 
+    @PutMapping(path = "/reset", produces="application/json")
+    public ResponseEntity<String> resetPwd(@RequestBody LoginDTO resetDTO){
+        System.out.println("Someone is trying to rest pwd: " + resetDTO.getUsername());
+        Auth auth = authService.findByUsername(resetDTO.getUsername());
+        if (auth != null) {
+            auth.setPassword(resetDTO.getPassword());
+            boolean response = authService.createNewAuth(auth);
+            return response ? ResponseEntity.ok().body("Password reset success!") :
+                    ResponseEntity.status(HttpStatus.FORBIDDEN).body("Password reset failed.");
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body("Password reset failed. Username does not exist.");
+        }
+    }
+
     private Authentication authenticate(LoginDTO loginDTO) throws BadCredentialsException {
         return authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginDTO.getUsername().toLowerCase().trim(),
                         loginDTO.getPassword().trim()));
+    }
+
+    private boolean usernameExists(String username) {
+        return authService.findByUsername(username) != null;
     }
 
     @GetMapping("health")
