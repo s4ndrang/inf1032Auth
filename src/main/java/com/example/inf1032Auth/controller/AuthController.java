@@ -51,12 +51,17 @@ public class AuthController {
 
     @PostMapping(path = "/sign-up", produces="application/json")
     public ResponseEntity<String> signUp(@RequestBody AuthDTO authDTO){
-    boolean success = authService.createNewAuth(authDTO.toModel());
-    return success?  ResponseEntity
-            .ok("Success") :
-            ResponseEntity
+        if (usernameExists(authDTO.getUsername())) {
+            return  ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
                     .body("Error");
+        }
+        boolean success = authService.createNewAuth(authDTO.toModel());
+        return success?  ResponseEntity
+                .ok("Success") :
+                ResponseEntity
+                        .status(HttpStatus.FORBIDDEN)
+                        .body("Error");
     }
 
     @PutMapping(path = "/reset", produces="application/json")
