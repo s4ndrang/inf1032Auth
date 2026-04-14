@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.*;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.bind.annotation.GetMapping;
 
 
 @Configuration
@@ -20,7 +21,8 @@ public class SecurityConfig  {
             "/auth/sign-up",
             "/auth/login",
             "/auth/reset",
-            "/auth/health"
+            "/auth/health",
+            "/auth/exist"
     };
 
     private final JwtAuthenticationEntryPoint jwtEntryPoint;

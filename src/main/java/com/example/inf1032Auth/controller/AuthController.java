@@ -54,7 +54,7 @@ public class AuthController {
         if (usernameExists(authDTO.getUsername())) {
             return  ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
-                    .body("Error");
+                    .body("Username already exists");
         }
         boolean success = authService.createNewAuth(authDTO.toModel());
         return success?  ResponseEntity
@@ -78,6 +78,14 @@ public class AuthController {
                     .status(HttpStatus.FORBIDDEN)
                     .body("Password reset failed. Username does not exist.");
         }
+    }
+
+    @GetMapping("/exist")
+    public ResponseEntity<String> isUsernameAvailable(@RequestParam String username) {
+        System.out.println("Someone is checking if username is available: " + username);
+        Auth auth = authService.findByUsername(username);
+        return auth == null ?  ResponseEntity.ok().body("ok") :
+                ResponseEntity.status(HttpStatus.FORBIDDEN).body("Username already exists");
     }
 
     private Authentication authenticate(LoginDTO loginDTO) throws BadCredentialsException {
